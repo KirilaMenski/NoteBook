@@ -3,10 +3,15 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
+  TextInput,
+  TouchableOpacity,
   ScrollView,
   View,
   Image,
 } from 'react-native';
+
+import NoteDb from './../database/NoteDb';
+import date from './../utils/date'
 
 class ViewNoteComponent extends Component {
 
@@ -20,22 +25,91 @@ class ViewNoteComponent extends Component {
       }
   };
 
+  state = {
+    editNote: false,
+
+    id: '',
+    image: '',
+    date: '',
+    title: '',
+    description: '',
+  }
+
   render() {
     const { params } = this.props.navigation.state;
 
     var icon = this.props.active ? require(params.image) : require('../resources/test.png');
     var title = params.title;
 
+    if (this.state.editNote) {
+      return (
+        <View style={styles.container}>
+
+          <Image source={icon} style={styles.image}/>
+
+          <ScrollView style={styles.descriptionContainer}>
+
+            <TextInput style={styles.title}
+              onChangeText={(title) => this.setState({title})}
+              placeholder={title} placeholderTextColor='green' underlineColorAndroid='transparent'></TextInput>
+            <TextInput style={styles.description}
+              onChangeText={(description) => this.setState({description})}
+              placeholder={params.description} placeholderTextColor='green' underlineColorAndroid='transparent'></TextInput>
+
+            <TouchableOpacity onPress={()=>this.editNote(params)} style={styles.editBtn}>
+
+              <Text style={styles.editBtnText}>Edit</Text>
+
+            </TouchableOpacity>
+
+          </ScrollView>
+
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
+
         <Image source={icon} style={styles.image}/>
+
         <ScrollView style={styles.descriptionContainer}>
+
           <Text style={styles.title}>{title.toUpperCase()} {params.date}</Text>
           <Text style={styles.description}>{params.description}</Text>
+
+        <TouchableOpacity onPress={()=>{
+          this.setState({editNote: true})
+          }} style={styles.editBtn}>
+
+          <Text style={styles.editBtnText}>Edit</Text>
+
+        </TouchableOpacity>
+
         </ScrollView>
+
       </View>
     );
   }
+
+  editNote(params) {
+
+    var note = {
+      id: params.id,
+      date: params.date,
+      title: this.state.title,
+      description: this.state.description,
+      image: params.image,
+    };
+    NoteDb.updateNote(note);
+    alert('id ' + note.title);
+    this.setState({
+      editNote: false,
+      title: 'note.title',
+      description: 'note.description',
+    })
+  }
+
 }
 
 const styles = StyleSheet.create({
@@ -65,6 +139,18 @@ const styles = StyleSheet.create({
   description:{
     fontSize: 16,
     marginTop: 5,
+  },
+  editBtn:{
+    backgroundColor: 'blue',
+    width: 100,
+    height: 30,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  editBtnText:{
+    color: '#fff',
+    alignSelf: 'center',
   }
 });
 

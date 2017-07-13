@@ -58,6 +58,7 @@ class MainComponent extends Component {
   viewNote(val) {
     this.props.navigation.navigate('ViewNoteComponent',
       {
+        id: val.id,
         image: val.image,
         date: val.date,
         title: val.title,
@@ -80,6 +81,8 @@ class MainComponent extends Component {
 
     NoteDb.addNote(note);
     this.setState({noteArray: NoteDb.getAllNotes()});
+
+    this.viewNote(note);
   }
 
   deleteNote(val) {

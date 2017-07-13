@@ -6,6 +6,7 @@ var tableName = 'note';
 let realm = new Realm({
   schema: [{
     name: tableName,
+    primaryKey: 'id',
     properties: {
       id: 'string',
       image: 'string',
@@ -27,6 +28,18 @@ var NoteDb = {
         title: note.title,
         description: note.description,
       });
+    });
+  },
+
+  updateNote(note) {
+    realm.write(()=>{
+      realm.create(tableName, {
+        id: note.id,
+        image: note.image,
+        date: note.date,
+        title: note.title,
+        description: note.description,
+      }, true);
     });
   },
 
