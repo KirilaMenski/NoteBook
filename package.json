@@ -7,9 +7,13 @@
 		"test": "jest"
 	},
 	"dependencies": {
+		"moment": "^2.18.1",
 		"react": "16.0.0-alpha.6",
+		"react-moment": "^0.6.0",
 		"react-native": "0.44.0",
-		"react-navigation": "^1.0.0-beta.11"
+		"react-navigation": "^1.0.0-beta.11",
+		"realm": "^1.10.0",
+		"uuid-js": "^0.7.5"
 	},
 	"devDependencies": {
 		"babel-jest": "20.0.3",

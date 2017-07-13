@@ -5,10 +5,13 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ListView,
   ScrollView,
 } from 'react-native';
-const Realm = require('realm');
+
 import NoteItem from './NoteItem';
+import NoteDb from './../database/NoteDb';
+import date from './../utils/date'
 
 class MainComponent extends Component {
 
@@ -23,26 +26,24 @@ class MainComponent extends Component {
   };
 
   state = {
-    noteArray:[{
-      'image': require('../resources/test.png'),
-      'title': 'Title',
-      'description':'This may be your desccription'
-    }],
-
-    image: require('../resources/test.png'),
-    title: 't123123',
-    description:'d',
+    noteArray:[],
   }
 
   render() {
 
+    this.state.noteArray = NoteDb.getAllNotes();
+
     let notes = this.state.noteArray.map((val, key)=>{
-      return <NoteItem key={key} keyVal={key} val={val} deleteMethod={() => this.deleteNote(key)}
+      return <NoteItem key={key} keyVal={key} val={val}
+                deleteMethod={() => this.deleteNote(val)}
                 viewNote={() => this.viewNote(val)}/>
     });
 
+    var count = NoteDb.getAllNotes().length;
+
     return (
       <View style={styles.container}>
+        <Text>Counts in Realm: {count}</Text>
         <ScrollView style={styles.scrolViewContainer}>
           {notes}
         </ScrollView>
@@ -58,6 +59,7 @@ class MainComponent extends Component {
     this.props.navigation.navigate('ViewNoteComponent',
       {
         image: val.image,
+        date: val.date,
         title: val.title,
         description: val.description,
       }
@@ -65,13 +67,24 @@ class MainComponent extends Component {
   }
 
   addNote() {
-    this.state.noteArray.push({'image':require('../resources/test.png'), 'title':'', 'description':''});
-    this.setState({noteArray: this.state.noteArray});
+    var id = 0;
+    if (NoteDb.getAllNotes() != null) {
+      id = NoteDb.getAllNotes().length;
+    }
+    var note = {
+      'image': '../resources/test2.png',
+      'date': '' + date.getCurrentDate(),
+      'title': 'title ' + id,
+      'description': 'note description',
+    };
+
+    NoteDb.addNote(note);
+    this.setState({noteArray: NoteDb.getAllNotes()});
   }
 
-  deleteNote(key) {
-    this.state.noteArray.splice(key, 1);
-    this.setState({noteArray: this.state.noteArray});
+  deleteNote(val) {
+    NoteDb.deleteNote(val);
+    this.setState({noteArray: NoteDb.getAllNotes()});
   }
 
 }
