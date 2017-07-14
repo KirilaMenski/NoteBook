@@ -26,6 +26,7 @@ class MainComponent extends Component {
   };
 
   state = {
+    update: false,
     noteArray:[],
   }
 
@@ -63,6 +64,7 @@ class MainComponent extends Component {
         date: val.date,
         title: val.title,
         description: val.description,
+        refresh: this.refreshFun
       }
     );
   }
@@ -88,6 +90,10 @@ class MainComponent extends Component {
   deleteNote(val) {
     NoteDb.deleteNote(val);
     this.setState({noteArray: NoteDb.getAllNotes()});
+  }
+
+  refreshFun = () => {
+    this.setState({update: true});
   }
 
 }

@@ -36,7 +36,7 @@ class ViewNoteComponent extends Component {
   }
 
   render() {
-    const { params } = this.props.navigation.state;
+    const {params} = this.props.navigation.state;
 
     var icon = this.props.active ? require(params.image) : require('../resources/test.png');
     var title = params.title;
@@ -101,13 +101,15 @@ class ViewNoteComponent extends Component {
       description: this.state.description,
       image: params.image,
     };
+
     NoteDb.updateNote(note);
-    alert('id ' + note.title);
-    this.setState({
-      editNote: false,
-      title: 'note.title',
-      description: 'note.description',
-    })
+
+    let refreshFunc = params.refresh;
+    if(typeof refreshFunc === 'function'){
+        refreshFunc();
+    }
+
+    this.props.navigation.goBack();
   }
 
 }
