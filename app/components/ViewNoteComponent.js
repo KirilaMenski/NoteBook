@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 
 import NoteDb from './../database/NoteDb';
-import date from './../utils/date'
+import date from './../utils/date';
+import DatePicker from 'react-native-datepicker';
+import RNCalendarEvents from 'react-native-calendar-events';
 
 class ViewNoteComponent extends Component {
 
@@ -27,10 +29,14 @@ class ViewNoteComponent extends Component {
 
   state = {
     editNote: false,
+    dateStartUpdate: false,
+    dateEndUpdate: false,
 
     id: '',
+    calendarId: '',
     image: '',
-    date: '',
+    dateStart: '',
+    dateEnd: '',
     title: '',
     description: '',
   }
@@ -44,6 +50,8 @@ class ViewNoteComponent extends Component {
     };
 
     var title = params.title;
+    var dateStart = this.state.dateStartUpdate ? this.state.dateStart : params.dateStart;
+    var dateEnd = this.state.dateEndUpdate ? this.state.dateEnd : params.dateEnd;
 
     if (this.state.editNote) {
       return (
@@ -51,6 +59,32 @@ class ViewNoteComponent extends Component {
           <ScrollView style={styles.scrollView}>
 
             <Image source={icon} style={styles.image}/>
+
+            <DatePicker
+              style={{width: 200, alignSelf: 'center', marginTop: 10,}}
+              date={dateStart}
+              mode="datetime"
+              placeholder="select date"
+              format="YYYY-MM-DD hh:mm"
+              minDate="2000-01-01 00.00"
+              maxDate="3000-12-31 23.59"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              onDateChange={(date) => {this.setState({dateStartUpdate: true, dateStart: date})}}
+            />
+
+            <DatePicker
+              style={{width: 200, alignSelf: 'center', marginTop: 10,}}
+              date={dateEnd}
+              mode="datetime"
+              placeholder="select date"
+              format="YYYY-MM-DD hh:mm"
+              minDate="2000-01-01 00.00"
+              maxDate="3000-12-31 23.59"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              onDateChange={(date) => {this.setState({dateEndUpdate: true, dateEnd: date})}}
+            />
 
             <View style={styles.descriptionContainer}>
               <TextInput style={styles.title}
@@ -81,7 +115,7 @@ class ViewNoteComponent extends Component {
 
           <View style={styles.descriptionContainer}>
 
-            <Text style={styles.title}>{title.toUpperCase()} {params.date}</Text>
+            <Text style={styles.title}>{title.toUpperCase()} {params.calendarId} w</Text>
             <Text style={styles.description}>{params.description}</Text>
 
           </View>
@@ -100,19 +134,64 @@ class ViewNoteComponent extends Component {
 
   editNote(params) {
 
-    var note = {
-      id: params.id,
-      date: params.date,
-      title: this.state.title,
-      description: this.state.description,
-      image: params.image,
-    };
+    if (params.calendarId == '') {
 
-    NoteDb.updateNote(note);
+      RNCalendarEvents.saveEvent(this.state.title, {
+        location: '57.245681, 24.145688',
+        notes: this.state.description,
+        startDate: date.getDate(this.state.dateStart),
+        endDate: date.getDate(this.state.dateEnd),
+      })
+      .then((id) => {
+        var note = {
+          id: '' + params.id,
+          calendarId: '' + id,
+          dateStart: this.state.dateStart,
+          dateEnd: this.state.dateEnd,
+          title: this.state.title,
+          description: this.state.description,
+          image: params.image,
+        };
 
-    let refreshFunc = params.refresh;
-    if(typeof refreshFunc === 'function'){
-        refreshFunc();
+        NoteDb.updateNote(note);
+
+        let refreshFunc = params.refresh;
+        if(typeof refreshFunc === 'function'){
+            refreshFunc();
+        }
+      })
+      .catch(error => {
+          alert("Error:" + error)
+      });
+    } else {
+      RNCalendarEvents.saveEvent(this.state.title, {
+        id: params.calendarId,
+        location: '57.245681, 24.145688',
+        notes: this.state.description,
+        startDate: date.getDate(this.state.dateStart),
+        endDate: date.getDate(this.state.dateEnd),
+      })
+      .then((id) => {
+        var note = {
+          id: params.id,
+          calendarId: '' + id,
+          dateStart: this.state.dateStart,
+          dateEnd: this.state.dateEnd,
+          title: this.state.title,
+          description: this.state.description,
+          image: params.image,
+        };
+
+        NoteDb.updateNote(note);
+
+        let refreshFunc = params.refresh;
+        if(typeof refreshFunc === 'function'){
+            refreshFunc();
+        }
+      })
+      .catch(error => {
+          alert("Error:" + error)
+      });
     }
 
     this.props.navigation.goBack();

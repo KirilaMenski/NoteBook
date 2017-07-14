@@ -9,8 +9,10 @@ let realm = new Realm({
     primaryKey: 'id',
     properties: {
       id: 'string',
+      calendarId: 'string',
       image: 'string',
-      date: 'string',
+      dateStart: 'string',
+      dateEnd: 'string',
       title: 'string',
       description: 'string',
     }
@@ -22,9 +24,11 @@ var NoteDb = {
   addNote(note) {
     realm.write(() => {
       realm.create(tableName, {
-        id: ''+UUID.create(4),
+        id: '' + UUID.create(4),
+        calendarId: note.calendarId,
         image: note.image,
-        date: note.date,
+        dateStart: note.dateStart,
+        dateEnd: note.dateEnd,
         title: note.title,
         description: note.description,
       });
@@ -35,8 +39,10 @@ var NoteDb = {
     realm.write(()=>{
       realm.create(tableName, {
         id: note.id,
+        calendarId: note.calendarId,
         image: note.image,
-        date: note.date,
+        dateStart: note.dateStart,
+        dateEnd: note.dateEnd,
         title: note.title,
         description: note.description,
       }, true);

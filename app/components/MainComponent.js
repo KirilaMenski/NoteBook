@@ -26,7 +26,6 @@ class MainComponent extends Component {
   };
 
   state = {
-    update: false,
     noteArray:[],
   }
 
@@ -44,7 +43,7 @@ class MainComponent extends Component {
 
     return (
       <View style={styles.container}>
-      
+
         <ScrollView style={styles.scrolViewContainer}>
           {notes}
         </ScrollView>
@@ -60,8 +59,10 @@ class MainComponent extends Component {
     this.props.navigation.navigate('ViewNoteComponent',
       {
         id: val.id,
+        calendarId: val.calendarId,
         image: val.image,
-        date: val.date,
+        dateStart: val.dateStart,
+        dateEnd: val.dateEnd,
         title: val.title,
         description: val.description,
         refresh: this.refreshFun
@@ -75,8 +76,10 @@ class MainComponent extends Component {
       id = NoteDb.getAllNotes().length;
     }
     var note = {
+      'calendarId': '',
       'image': '../resources/test2.png',
-      'date': '' + date.getCurrentDate(),
+      'dateStart': '' + date.getCurrentDate(),
+      'dateEnd': '' + date.getCurrentDate(),
       'title': 'title ' + id,
       'description': 'note description',
     };
@@ -93,7 +96,7 @@ class MainComponent extends Component {
   }
 
   refreshFun = () => {
-    this.setState({update: true});
+    this.setState({noteArray: NoteDb.getAllNotes()});
   }
 
 }
