@@ -14,15 +14,15 @@ class NoteItem extends Component {
   render() {
 
     return (
-      <TouchableHighlight onPress={this.props.viewNote}>
+      <TouchableHighlight onPress={this.props.viewNote} underlayColor={'#969696'}>
         <View key={this.props.keyVal} style={styles.container}>
 
-          <Image source={{uri: '../resources/test2.png'}} style={styles.image}/>
+          <Image source={{uri: 'file:///storage/emulated/0/Pictures/solar-eclipse-worldwide-015.jpg'}} style={styles.image}/>
 
           <View style={styles.descriptionContainer}>
 
-            <Text style={styles.title}>{this.props.val.title}</Text>
-            <Text style={styles.description}>{this.props.val.description}</Text>
+            <Text style={styles.title} numberOfLines={1}>{this.props.val.title}</Text>
+            <Text style={styles.description} numberOfLines={3}>{this.props.val.description}</Text>
 
           </View>
 
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   image:{
     width: 100,
     height: 100,
+    borderRadius: 10,
   },
   descriptionContainer:{
     flex: 1,

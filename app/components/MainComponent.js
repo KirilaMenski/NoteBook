@@ -44,7 +44,7 @@ class MainComponent extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>Counts in Realm: {count}</Text>
+      
         <ScrollView style={styles.scrolViewContainer}>
           {notes}
         </ScrollView>
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   addNoteBtn:{
+    position: 'absolute',
     alignSelf: 'flex-end',
     backgroundColor: '#E91E63',
     width: 60,
@@ -117,7 +118,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 8,
     zIndex: 10,
-    marginRight: 10,
+    bottom: 10,
+    right: 10,
   },
   addNoteBtnText:{
     color: '#fff',
@@ -126,11 +128,3 @@ const styles = StyleSheet.create({
 });
 
 export default MainComponent;
-
-// let realm = new Realm({
-//      schema: [{name: 'Dog', properties: {name: 'string'}}]
-//    });
-//
-//    realm.write(() => {
-//      realm.create('Dog', {name: 'Rex'});
-//    });

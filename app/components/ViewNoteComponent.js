@@ -38,31 +38,36 @@ class ViewNoteComponent extends Component {
   render() {
     const {params} = this.props.navigation.state;
 
-    var icon = this.props.active ? require(params.image) : require('../resources/test.png');
+    // var icon = this.props.active ? require(params.image) : require('../resources/test.png');
+    var icon = {
+      uri:'file:///storage/emulated/0/Pictures/solar-eclipse-worldwide-015.jpg'
+    };
+
     var title = params.title;
 
     if (this.state.editNote) {
       return (
         <View style={styles.container}>
+          <ScrollView style={styles.scrollView}>
 
-          <Image source={icon} style={styles.image}/>
+            <Image source={icon} style={styles.image}/>
 
-          <ScrollView style={styles.descriptionContainer}>
-
-            <TextInput style={styles.title}
-              onChangeText={(title) => this.setState({title})}
-              placeholder={title} placeholderTextColor='green' underlineColorAndroid='transparent'></TextInput>
-            <TextInput style={styles.description}
-              onChangeText={(description) => this.setState({description})}
-              placeholder={params.description} placeholderTextColor='green' underlineColorAndroid='transparent'></TextInput>
-
-            <TouchableOpacity onPress={()=>this.editNote(params)} style={styles.editBtn}>
-
-              <Text style={styles.editBtnText}>Edit</Text>
-
-            </TouchableOpacity>
+            <View style={styles.descriptionContainer}>
+              <TextInput style={styles.title}
+                  onChangeText={(title) => this.setState({title})}
+                  placeholder={title} placeholderTextColor='green' underlineColorAndroid='transparent'></TextInput>
+              <TextInput style={styles.description}
+                  onChangeText={(description) => this.setState({description})}
+                  placeholder={params.description} placeholderTextColor='green' underlineColorAndroid='transparent'></TextInput>
+            </View>
 
           </ScrollView>
+
+          <TouchableOpacity onPress={()=>this.editNote(params)} style={styles.editBtn}>
+
+            <Text style={styles.editBtnText}>Edit</Text>
+
+          </TouchableOpacity>
 
         </View>
       );
@@ -70,14 +75,18 @@ class ViewNoteComponent extends Component {
 
     return (
       <View style={styles.container}>
+        <ScrollView style={styles.scrollView}>
 
-        <Image source={icon} style={styles.image}/>
+          <Image source={icon} style={styles.image}/>
 
-        <ScrollView style={styles.descriptionContainer}>
+          <View style={styles.descriptionContainer}>
 
-          <Text style={styles.title}>{title.toUpperCase()} {params.date}</Text>
-          <Text style={styles.description}>{params.description}</Text>
+            <Text style={styles.title}>{title.toUpperCase()} {params.date}</Text>
+            <Text style={styles.description}>{params.description}</Text>
 
+          </View>
+
+        </ScrollView>
         <TouchableOpacity onPress={()=>{
           this.setState({editNote: true})
           }} style={styles.editBtn}>
@@ -85,9 +94,6 @@ class ViewNoteComponent extends Component {
           <Text style={styles.editBtnText}>Edit</Text>
 
         </TouchableOpacity>
-
-        </ScrollView>
-
       </View>
     );
   }
@@ -119,6 +125,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
+    padding: 10,
+  },
+  scrollView:{
+    flex: 1,
+    paddingBottom: 20,
   },
   image:{
     width: 200,
@@ -128,29 +139,33 @@ const styles = StyleSheet.create({
   descriptionContainer:{
     flex: 1,
     marginTop: 20,
-    padding: 10,
-    borderTopWidth: 2,
-    borderTopColor: '#000',
   },
   title:{
     fontSize: 25,
     fontWeight: 'bold',
     borderBottomWidth: 1,
     borderBottomColor: '#ceceb7',
+    borderTopWidth: 2,
+    borderTopColor: '#000',
   },
   description:{
     fontSize: 16,
     marginTop: 5,
+    lineHeight: 20,
+    paddingBottom: 10,
   },
   editBtn:{
     backgroundColor: 'blue',
-    width: 100,
-    height: 30,
+    width: 150,
+    height: 40,
     alignSelf: 'center',
     justifyContent: 'center',
-    borderRadius: 10,
+    marginBottom: 5,
+    borderRadius: 20,
+    zIndex: 10,
   },
   editBtnText:{
+    fontSize: 20,
     color: '#fff',
     alignSelf: 'center',
   }
