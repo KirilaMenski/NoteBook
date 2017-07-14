@@ -12,6 +12,7 @@ import {
 import NoteItem from './NoteItem';
 import NoteDb from './../database/NoteDb';
 import date from './../utils/date'
+import RNCalendarEvents from 'react-native-calendar-events';
 
 class MainComponent extends Component {
 
@@ -91,6 +92,7 @@ class MainComponent extends Component {
   }
 
   deleteNote(val) {
+    RNCalendarEvents.removeEvent(val.calendarId);
     NoteDb.deleteNote(val);
     this.setState({noteArray: NoteDb.getAllNotes()});
   }
