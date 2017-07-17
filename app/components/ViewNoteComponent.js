@@ -144,7 +144,7 @@ class ViewNoteComponent extends Component {
       })
       .then((id) => {
         var note = {
-          id: '' + params.id,
+          id: params.id,
           calendarId: '' + id,
           dateStart: this.state.dateStart,
           dateEnd: this.state.dateEnd,
@@ -174,7 +174,7 @@ class ViewNoteComponent extends Component {
       .then((id) => {
         var note = {
           id: params.id,
-          calendarId: '' + id,
+          calendarId: params.calendarId,
           dateStart: this.state.dateStart,
           dateEnd: this.state.dateEnd,
           title: this.state.title,

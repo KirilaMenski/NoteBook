@@ -72,23 +72,20 @@ class MainComponent extends Component {
   }
 
   addNote() {
-    var id = 0;
-    if (NoteDb.getAllNotes() != null) {
-      id = NoteDb.getAllNotes().length;
-    }
+
     var note = {
       'calendarId': '',
       'image': '../resources/test2.png',
       'dateStart': '' + date.getCurrentDate(),
       'dateEnd': '' + date.getCurrentDate(),
-      'title': 'title ' + id,
+      'title': 'title',
       'description': 'note description',
     };
 
     NoteDb.addNote(note);
     this.setState({noteArray: NoteDb.getAllNotes()});
 
-    this.viewNote(note);
+    // this.viewNote(note);
   }
 
   deleteNote(val) {

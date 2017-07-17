@@ -38,7 +38,7 @@ var NoteDb = {
   updateNote(note) {
     realm.write(()=>{
       realm.create(tableName, {
-        id: note.id,
+        id: '' + note.id,
         calendarId: note.calendarId,
         image: note.image,
         dateStart: note.dateStart,
